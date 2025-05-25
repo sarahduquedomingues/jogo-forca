@@ -1,33 +1,45 @@
 body {
   font-family: Arial, sans-serif;
-  /* Define a fonte usada na página */
   text-align: center;
-  /* Centraliza todo o texto da página */
-  margin: 2rem;
-  /* Espaçamento ao redor do conteúdo */
+  padding: 30px;
+  background-color: #f4f4f4;
 }
 
-#word {
-  font-size: 2rem;
-  /* Tamanho maior para a palavra */
-  letter-spacing: 0.5rem;
-  /* Espaço entre as letras */
-  margin-bottom: 1rem;
-  /* Espaço abaixo do elemento */
+h1 {
+  font-size: 2em;
 }
 
-#wrong-letters {
+#palavra {
+  font-size: 2em;
+  letter-spacing: 10px;
+  margin: 20px 0;
+}
+
+#letras-erradas {
   color: red;
-  /* Letras erradas aparecem em vermelho */
+  font-weight: bold;
 }
 
-#message {
-  margin-top: 1rem;
-  /* Espaço acima da mensagem */
+button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 1em;
+}
+
+#mensagem {
+  font-size: 1.5em;
   font-weight: bold;
-  /* Texto em negrito */
-  font-size: 1.2rem;
-  /* Texto um pouco maior */
   color: green;
-  /* Cor padrão da mensagem é verde (para vitória) */
+  margin-top: 20px;
+}
+
+#mensagem {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-top: 20px;
+  color: green;
+}
+
+#mensagem.derrota {
+  color: red;
 }

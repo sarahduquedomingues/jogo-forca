@@ -2,38 +2,16 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <!-- Define o conjunto de caracteres para UTF-8 (suporta acentos e caracteres especiais) -->
-
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- Garante que a página seja responsiva, adaptando ao tamanho da tela -->
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Jogo da Forca</title>
-  <!-- Título que aparece na aba do navegador -->
-
   <link rel="stylesheet" href="style.css" />
-  <!-- Link para o arquivo CSS externo que estiliza a página -->
 </head>
 <body>
-
   <h1>Jogo da Forca</h1>
-  <!-- Título principal da página -->
-
-  <p id="word">_ _ _ _ _</p>
-  <!-- Aqui vai aparecer a palavra com letras corretas ou underlines para as letras faltantes -->
-
-  <p>Erros: <span id="wrong-letters"></span></p>
-  <!-- Aqui vai listar as letras que o jogador errou -->
-
-  <p>Chances restantes: <span id="chances">6</span></p>
-  <!-- Mostra quantas chances ainda restam para errar -->
-
-  <p>Tente digitar uma letra no teclado!</p>
-  <!-- Instrução para o jogador -->
-
-  <div id="message"></div>
-  <!-- Aqui aparecerá mensagens como "Você venceu" ou "Você perdeu" -->
+  <p id="palavra"></p>
+  <p>Letras erradas: <span id="letras-erradas"></span></p>
+  <button onclick="proximaPalavra()">Próxima Palavra</button>
 
   <script src="script.js"></script>
-  <!-- Link para o arquivo JavaScript que controla a lógica do jogo -->
 </body>
 </html>

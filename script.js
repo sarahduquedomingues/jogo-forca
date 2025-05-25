@@ -1,102 +1,88 @@
-// Lista de palavras possíveis para o jogo
-const palavras = ["Cineangiocoronariográfico", "Alcantil", "Exprobrar", "Iscnofonia", "Mequetrefe"];
+const palavras = ['mequetrefe', 'escarnio', 'prolixo'];
 
-// Número máximo de chances que o jogador tem para errar
-const chancesMax = 6;
-
-// Variável que vai controlar quantas chances ainda restam (começa no máximo)
-let chancesRestantes = chancesMax;
-
-// Seleciona aleatoriamente uma palavra da lista para o jogo atual
-let palavraSelecionada = palavras[Math.floor(Math.random() * palavras.length)];
-
-// Array para armazenar as letras que o jogador acertou
+let indicePalavraAtual = 0;
+let palavraAtual = palavras[indicePalavraAtual].toLowerCase();
 let letrasCorretas = [];
-
-// Array para armazenar as letras que o jogador errou
 let letrasErradas = [];
+const maxErros = 6; // ✅ Limite de erros
 
-// Seleciona elementos HTML para mostrar o estado do jogo na tela
-const wordEl = document.getElementById("word"); // palavra com letras e underlines
-const wrongLettersEl = document.getElementById("wrong-letters"); // letras erradas
-const chancesEl = document.getElementById("chances"); // chances restantes
-const messageEl = document.getElementById("message"); // mensagens (ganhou/perdeu)
+const palavraElemento = document.getElementById('palavra');
+const letrasErradasElemento = document.getElementById('letras-erradas');
 
-// Função que mostra a palavra na tela, mostrando as letras que o jogador acertou
-function mostrarPalavra() {
-  // Para cada letra da palavra selecionada:
-  // Se o jogador acertou a letra, mostra a letra
-  // Se não, mostra "_"
-  let displayWord = palavraSelecionada
-    .split("") // transforma a palavra em array de letras
-    .map(letra => (letrasCorretas.includes(letra) ? letra : "_")) // para cada letra, mostra letra ou "_"
-    .join(" "); // junta tudo com espaço entre as letras para mostrar
+const mensagemElemento = document.createElement('p');
+mensagemElemento.id = 'mensagem';
+document.body.appendChild(mensagemElemento);
 
-  // Atualiza o conteúdo do elemento HTML com a palavra parcial
-  wordEl.textContent = displayWord;
+// ✅ Função que atualiza a palavra mostrada
+function atualizarPalavraNaTela() {
+  const exibicao = palavraAtual
+    .split('')
+    .map(letra => (letrasCorretas.includes(letra) ? letra : '_'))
+    .join(' ');
+  palavraElemento.textContent = exibicao;
+}
 
-  // Se a palavra já está completa (sem "_"), jogador ganhou
-  if (!displayWord.includes("_")) {
-    messageEl.style.color = "green";
-    messageEl.textContent = "Parabéns! Você venceu!";
+// ✅ Função que atualiza as letras erradas mostradas
+function atualizarLetrasErradas() {
+  letrasErradasElemento.textContent = letrasErradas.join(', ');
+}
 
-    // Remove o evento de teclado para não aceitar mais letras depois de ganhar
-    window.removeEventListener("keydown", handleKeydown);
+// ✅ Verifica se ganhou
+function verificarVitoria() {
+  const todasLetrasDescobertas = palavraAtual
+    .split('')
+    .every(letra => letrasCorretas.includes(letra));
+
+  if (todasLetrasDescobertas) {
+    mensagemElemento.textContent = '🎉 Você acertou!';
+    jogoEncerrado = true;
   }
 }
 
-// Função que atualiza as letras erradas e as chances restantes na tela
-function atualizarErros() {
-  // Mostra as letras erradas separadas por vírgula
-  wrongLettersEl.textContent = letrasErradas.join(", ");
-
-  // Mostra quantas chances ainda restam
-  chancesEl.textContent = chancesRestantes;
-
-  // Se acabar as chances, o jogador perdeu
-  if (chancesRestantes <= 0) {
-    messageEl.style.color = "red";
-    messageEl.textContent = `Você perdeu! A palavra era "${palavraSelecionada}".`;
-
-    // Remove o evento de teclado para não aceitar mais letras depois de perder
-    window.removeEventListener("keydown", handleKeydown);
+// ✅ Verifica se perdeu
+function verificarDerrota() {
+  if (letrasErradas.length >= maxErros) {
+    mensagemElemento.textContent = `💀 Você perdeu! A palavra era: ${palavraAtual}`;
+    jogoEncerrado = true;
   }
 }
 
-// Função que responde quando o jogador pressiona uma tecla no teclado
-function handleKeydown(e) {
-  const letra = e.key.toLowerCase(); // pega a letra digitada e transforma em minúscula
+let jogoEncerrado = false; // flag para travar o jogo depois de ganhar ou perder
 
-  // Verifica se a letra é uma letra do alfabeto (inclui letras com acento e ç) e só uma letra
-  if (letra.match(/[a-záéíóúãõç]/) && letra.length === 1) {
+// ✅ Muda para a próxima palavra
+function proximaPalavra() {
+  indicePalavraAtual = (indicePalavraAtual + 1) % palavras.length;
+  palavraAtual = palavras[indicePalavraAtual].toLowerCase();
+  letrasCorretas = [];
+  letrasErradas = [];
+  mensagemElemento.textContent = '';
+  jogoEncerrado = false;
+  atualizarPalavraNaTela();
+  atualizarLetrasErradas();
+}
 
-    // Se a palavra contém a letra digitada
-    if (palavraSelecionada.includes(letra)) {
+// ✅ Detecta letras digitadas
+document.addEventListener('keydown', event => {
+  if (jogoEncerrado) return; // trava se o jogo já acabou
 
-      // Se a letra ainda não foi marcada como correta, adiciona nas letras corretas
+  const letra = event.key.toLowerCase();
+
+  if (letra.match(/[a-z]/) && letra.length === 1) {
+    if (palavraAtual.includes(letra)) {
       if (!letrasCorretas.includes(letra)) {
         letrasCorretas.push(letra);
-        mostrarPalavra(); // atualiza a palavra na tela
       }
-
     } else {
-      // Se a letra digitada não está na palavra
-
-      // Se ainda não foi registrada como erro, adiciona na lista de letras erradas
       if (!letrasErradas.includes(letra)) {
         letrasErradas.push(letra);
-        chancesRestantes--; // diminui as chances restantes
-        atualizarErros(); // atualiza os erros e chances na tela
       }
     }
+
+    atualizarPalavraNaTela();
+    atualizarLetrasErradas();
+    verificarVitoria();
+    verificarDerrota();
   }
-}
+});
 
-// Mostra a palavra inicial (com todos "_")
-mostrarPalavra();
-
-// Mostra as chances e erros iniciais
-atualizarErros();
-
-// Adiciona o ouvinte para capturar as teclas digitadas pelo jogador
-window.addEventListener("keydown", handleKeydown);
+atualizarPalavraNaTela();
