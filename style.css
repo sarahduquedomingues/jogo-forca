@@ -1,0 +1,33 @@
+body {
+  font-family: Arial, sans-serif;
+  /* Define a fonte usada na página */
+  text-align: center;
+  /* Centraliza todo o texto da página */
+  margin: 2rem;
+  /* Espaçamento ao redor do conteúdo */
+}
+
+#word {
+  font-size: 2rem;
+  /* Tamanho maior para a palavra */
+  letter-spacing: 0.5rem;
+  /* Espaço entre as letras */
+  margin-bottom: 1rem;
+  /* Espaço abaixo do elemento */
+}
+
+#wrong-letters {
+  color: red;
+  /* Letras erradas aparecem em vermelho */
+}
+
+#message {
+  margin-top: 1rem;
+  /* Espaço acima da mensagem */
+  font-weight: bold;
+  /* Texto em negrito */
+  font-size: 1.2rem;
+  /* Texto um pouco maior */
+  color: green;
+  /* Cor padrão da mensagem é verde (para vitória) */
+}
