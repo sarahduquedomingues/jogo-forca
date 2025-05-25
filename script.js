@@ -1,19 +1,75 @@
+// script.js
+
 const palavras = ['mequetrefe', 'escarnio', 'prolixo'];
 
 let indicePalavraAtual = 0;
 let palavraAtual = palavras[indicePalavraAtual].toLowerCase();
 let letrasCorretas = [];
 let letrasErradas = [];
-const maxErros = 6; // ✅ Limite de erros
+const maxErros = 6;
 
 const palavraElemento = document.getElementById('palavra');
 const letrasErradasElemento = document.getElementById('letras-erradas');
+const mensagemElemento = document.getElementById('mensagem');
 
-const mensagemElemento = document.createElement('p');
-mensagemElemento.id = 'mensagem';
-document.body.appendChild(mensagemElemento);
+const bonequinhoPartes = [
+  document.querySelector('.forca-cabeca'),
+  document.querySelector('.forca-corpo'),
+  document.querySelector('.forca-braco-esq'),
+  document.querySelector('.forca-braco-dir'),
+  document.querySelector('.forca-perna-esq'),
+  document.querySelector('.forca-perna-dir'),
+];
 
-// ✅ Função que atualiza a palavra mostrada
+const tecladoDiv = document.getElementById('teclado');
+
+let jogoEncerrado = false;
+
+// Cria teclado virtual com botões A-Z
+function criarTeclado() {
+  const letras = 'abcdefghijklmnopqrstuvwxyz';
+  tecladoDiv.innerHTML = ''; // limpa
+  for (let letra of letras) {
+    const botao = document.createElement('button');
+    botao.textContent = letra.toUpperCase();
+    botao.id = `tecla-${letra}`;
+    botao.addEventListener('click', () => letraClicada(letra));
+    tecladoDiv.appendChild(botao);
+  }
+}
+
+// Quando clica numa letra do teclado virtual
+function letraClicada(letra) {
+  if (jogoEncerrado) return;
+
+  // Desabilita o botão da letra clicada
+  const botao = document.getElementById(`tecla-${letra}`);
+  botao.disabled = true;
+
+  if (palavraAtual.includes(letra)) {
+    if (!letrasCorretas.includes(letra)) {
+      letrasCorretas.push(letra);
+    }
+  } else {
+    if (!letrasErradas.includes(letra)) {
+      letrasErradas.push(letra);
+      mostrarParteBonequinho();
+    }
+  }
+
+  atualizarPalavraNaTela();
+  atualizarLetrasErradas();
+  verificarVitoria();
+  verificarDerrota();
+}
+
+function mostrarParteBonequinho() {
+  const erros = letrasErradas.length;
+  if (erros <= maxErros) {
+    bonequinhoPartes[erros - 1].style.display = 'block';
+  }
+}
+
 function atualizarPalavraNaTela() {
   const exibicao = palavraAtual
     .split('')
@@ -22,12 +78,10 @@ function atualizarPalavraNaTela() {
   palavraElemento.textContent = exibicao;
 }
 
-// ✅ Função que atualiza as letras erradas mostradas
 function atualizarLetrasErradas() {
   letrasErradasElemento.textContent = letrasErradas.join(', ');
 }
 
-// ✅ Verifica se ganhou
 function verificarVitoria() {
   const todasLetrasDescobertas = palavraAtual
     .split('')
@@ -36,20 +90,23 @@ function verificarVitoria() {
   if (todasLetrasDescobertas) {
     mensagemElemento.textContent = '🎉 Você acertou!';
     jogoEncerrado = true;
+    desabilitarTeclado();
   }
 }
 
-// ✅ Verifica se perdeu
 function verificarDerrota() {
   if (letrasErradas.length >= maxErros) {
     mensagemElemento.textContent = `💀 Você perdeu! A palavra era: ${palavraAtual}`;
     jogoEncerrado = true;
+    desabilitarTeclado();
   }
 }
 
-let jogoEncerrado = false; // flag para travar o jogo depois de ganhar ou perder
+function desabilitarTeclado() {
+  const botoes = tecladoDiv.querySelectorAll('button');
+  botoes.forEach(botao => (botao.disabled = true));
+}
 
-// ✅ Muda para a próxima palavra
 function proximaPalavra() {
   indicePalavraAtual = (indicePalavraAtual + 1) % palavras.length;
   palavraAtual = palavras[indicePalavraAtual].toLowerCase();
@@ -57,32 +114,15 @@ function proximaPalavra() {
   letrasErradas = [];
   mensagemElemento.textContent = '';
   jogoEncerrado = false;
+
+  // Esconde todas as partes do bonequinho
+  bonequinhoPartes.forEach(parte => (parte.style.display = 'none'));
+
   atualizarPalavraNaTela();
   atualizarLetrasErradas();
+  criarTeclado();
 }
 
-// ✅ Detecta letras digitadas
-document.addEventListener('keydown', event => {
-  if (jogoEncerrado) return; // trava se o jogo já acabou
-
-  const letra = event.key.toLowerCase();
-
-  if (letra.match(/[a-z]/) && letra.length === 1) {
-    if (palavraAtual.includes(letra)) {
-      if (!letrasCorretas.includes(letra)) {
-        letrasCorretas.push(letra);
-      }
-    } else {
-      if (!letrasErradas.includes(letra)) {
-        letrasErradas.push(letra);
-      }
-    }
-
-    atualizarPalavraNaTela();
-    atualizarLetrasErradas();
-    verificarVitoria();
-    verificarDerrota();
-  }
-});
-
+// Inicializa o jogo
+criarTeclado();
 atualizarPalavraNaTela();
