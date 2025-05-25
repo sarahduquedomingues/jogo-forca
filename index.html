@@ -2,20 +2,37 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Jogo da Forca</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
   <h1>Jogo da Forca</h1>
-  <!-- Canvas para desenhar o bonequinho da forca -->
-  <canvas id="forca" width="200" height="250"></canvas>
 
   <p id="palavra"></p>
   <p>Letras erradas: <span id="letras-erradas"></span></p>
-  <button onclick="proximaPalavra()">Próxima Palavra</button>
+
+  <div id="bonequinho">
+    <!-- Aqui vamos desenhar o bonequinho com CSS -->
+    <div class="forca-base"></div>
+    <div class="forca-posto"></div>
+    <div class="forca-barra"></div>
+    <div class="forca-corda"></div>
+    <div class="forca-cabeca"></div>
+    <div class="forca-corpo"></div>
+    <div class="forca-braco-esq"></div>
+    <div class="forca-braco-dir"></div>
+    <div class="forca-perna-esq"></div>
+    <div class="forca-perna-dir"></div>
+  </div>
+
+  <div id="teclado"></div>
+
+  <button onclick="proximaPalavra()" id="btn-proxima">Próxima Palavra</button>
+
+  <p id="mensagem"></p>
 
   <script src="script.js" defer></script>
-
 </body>
 </html>
