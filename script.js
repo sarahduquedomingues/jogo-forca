@@ -1,5 +1,5 @@
 // Lista de palavras possíveis para o jogo
-const palavras = ["banana", "laranja", "melancia", "abacaxi", "morango"];
+const palavras = ["Cineangiocoronariográfico", "Alcantil", "Exprobrar", "Iscnofonia", "Mequetrefe"];
 
 // Número máximo de chances que o jogador tem para errar
 const chancesMax = 6;
