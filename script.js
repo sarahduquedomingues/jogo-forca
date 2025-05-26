@@ -1,6 +1,6 @@
 // script.js
 
-const palavras = ['al tiro', 'cachai'];
+const palavras = ['luca', 'cachai', 'cabro', 'carabineiro'];
 
 let indicePalavraAtual = 0;
 let palavraAtual = palavras[indicePalavraAtual].toLowerCase();
